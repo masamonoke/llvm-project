@@ -173,6 +173,11 @@ New checks
   Finds virtual function overrides with different visibility than the function
   in the base class.
 
+- New :doc:`readability-mpe-ternary-operator-check
+  <clang-tidy/checks/readability/mpe-ternary-operator-check>` check.
+
+  Finds ternary operator usage
+
 New check aliases
 ^^^^^^^^^^^^^^^^^
 
