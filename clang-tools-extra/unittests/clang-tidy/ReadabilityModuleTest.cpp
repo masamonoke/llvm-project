@@ -2,6 +2,7 @@
 #include "readability/BracesAroundStatementsCheck.h"
 #include "readability/NamespaceCommentCheck.h"
 #include "readability/SimplifyBooleanExprCheck.h"
+#include "readability/MpePrefixCheck.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -11,6 +12,7 @@ namespace test {
 using readability::BracesAroundStatementsCheck;
 using readability::NamespaceCommentCheck;
 using readability::SimplifyBooleanExprCheck;
+using readability::MpePrefixCheck;
 
 TEST(NamespaceCommentCheckTest, Basic) {
   EXPECT_EQ("namespace i {\n} // namespace i",
@@ -510,6 +512,11 @@ TEST(SimplifyBooleanExprCheckTest, CodeWithError) {
             runCheckOnCode<SimplifyBooleanExprCheck>(
                 "void foo(bool b){ if (b) return true; return false; }",
                 nullptr, "input.cc", {"-Wno-error=return-type"}));
+}
+
+// TODO: not tested yet
+TEST(MpePrefixCheckTest, RawPointer) {
+	EXPECT_EQ("void* pVar;", runCheckOnCode<MpePrefixCheck>("void* Var;"));
 }
 
 } // namespace test
