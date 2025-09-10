@@ -173,6 +173,12 @@ New checks
   Finds virtual function overrides with different visibility than the function
   in the base class.
 
+- New :doc:`readability-mpe-forbidden-std-check
+  <clang-tidy/checks/readability/mpe-forbidden-std-check>` check.
+
+  Finds std namespace functions calls and type usages
+  and checks if it is forbidden
+
 New check aliases
 ^^^^^^^^^^^^^^^^^
 

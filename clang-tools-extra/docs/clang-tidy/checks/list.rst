@@ -255,7 +255,7 @@ Clang-Tidy Checks
    :doc:`llvm-prefer-static-over-anonymous-namespace <llvm/prefer-static-over-anonymous-namespace>`,
    :doc:`llvm-twine-local <llvm/twine-local>`, "Yes"
    :doc:`llvm-use-new-mlir-op-builder <llvm/use-new-mlir-op-builder>`, "Yes"
-   :doc:`llvm-use-ranges <llvm/use-ranges>`, "Yes"
+   :doc:`llvm-use-ranges <llvm/use-ranges>`,
    :doc:`llvmlibc-callee-namespace <llvmlibc/callee-namespace>`,
    :doc:`llvmlibc-implementation-in-namespace <llvmlibc/implementation-in-namespace>`,
    :doc:`llvmlibc-inline-function-decl <llvmlibc/inline-function-decl>`, "Yes"
@@ -391,6 +391,7 @@ Clang-Tidy Checks
    :doc:`readability-math-missing-parentheses <readability/math-missing-parentheses>`, "Yes"
    :doc:`readability-misleading-indentation <readability/misleading-indentation>`,
    :doc:`readability-misplaced-array-index <readability/misplaced-array-index>`, "Yes"
+   :doc:`readability-mpe-forbidden-std-check <readability/mpe-forbidden-std-check>`, "Yes"
    :doc:`readability-named-parameter <readability/named-parameter>`, "Yes"
    :doc:`readability-non-const-parameter <readability/non-const-parameter>`, "Yes"
    :doc:`readability-operators-representation <readability/operators-representation>`, "Yes"
