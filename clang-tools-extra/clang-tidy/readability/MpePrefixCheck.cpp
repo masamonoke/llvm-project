@@ -15,11 +15,7 @@ using namespace clang::ast_matchers;
 namespace clang::tidy::readability {
 
 MpePrefixCheck::MpePrefixCheck(StringRef Name, ClangTidyContext *Context)
-    : ClangTidyCheck(Name, Context), SmartPointerNames({
-        { "std::unique_ptr", "uniquePointer" },
-        { "std::shared_ptr", "sharedPointer" },
-        { "std::weak_ptr", "weakPointer" }
-    }) {}
+    : ClangTidyCheck(Name, Context), SmartPointerNames(getPointerTypes()) {}
 
 void MpePrefixCheck::registerMatchers(MatchFinder *Finder) {
   Finder->addMatcher(
@@ -80,10 +76,14 @@ static bool isVarPrefixCorrect(StringRef Name) {
              : false;
 }
 
-static bool isFieldPrefixCorrect(StringRef Name) {
+static bool isPtrFieldPrefixCorrect(StringRef Name) {
   return Name.starts_with("m_p")
              ? Name.size() > 3 && std::isupper(*(Name.begin() + 3))
              : false;
+}
+
+static bool isFieldPrefixCorrect(StringRef Name) {
+  return Name.starts_with("m_");
 }
 
 static std::string varFix(StringRef Name) {
@@ -142,7 +142,7 @@ void MpePrefixCheck::memberPointerCheck(const MatchFinder::MatchResult &Result) 
   }
 
   StringRef Name = Var->getName();
-  if (not isFieldPrefixCorrect(Name)) {
+  if (not isPtrFieldPrefixCorrect(Name)) {
     const std::string Fix = fieldPtrFix(Name);
     diag(Var->getLocation(),
          "member pointer variable %0 should be prefixed with 'm_p'")
@@ -179,7 +179,7 @@ void MpePrefixCheck::stdSmartPointerFieldCheck(const ast_matchers::MatchFinder::
   }
 
   StringRef FieldDeclName = PtrFieldDecl->getName();
-  if (not isFieldPrefixCorrect(FieldDeclName)) {
+  if (not isPtrFieldPrefixCorrect(FieldDeclName)) {
     const std::string Fix = fieldPtrFix(FieldDeclName);
     diag(PtrFieldDecl->getLocation(),
          "member smart pointer variable %0 should be prefixed with 'm_p'")
@@ -217,6 +217,19 @@ void MpePrefixCheck::memberNonPointerDeclCheck(const ast_matchers::MatchFinder::
         << MatchedFieldDecl
         << FixItHint::CreateReplacement(MatchedFieldDecl->getLocation(), Fix);
   }
+}
+
+SmallVector<std::pair<std::string, std::string>, 0> MpePrefixCheck::getPointerTypes() {
+  const auto Opts = Options.get("PointerTypes", "std::unique_ptr,std::shared_ptr,std::weak_ptr");
+  SmallVector<StringRef, 0> List;
+  Opts.split(List, ",");
+
+  SmallVector<std::pair<std::string, std::string>, 0> RetList;
+  for (const auto& Item : List) {
+    RetList.emplace_back(Item.str(), Item.str());
+  }
+
+  return RetList;
 }
 
 } // namespace clang::tidy::readability

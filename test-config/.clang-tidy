@@ -1,3 +1,8 @@
 Checks: >
   -*,
   readability-mpe-prefix
+
+# You can add your pointer types and they will be checked against the pointer rule
+# CheckOptions:
+#   - key: readability-mpe-prefix.PointerTypes
+#     value: "std::unique_ptr,std::shared_ptr,std::weak_ptr"

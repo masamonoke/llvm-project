@@ -42,6 +42,8 @@ private:
   void pointerVarCheck(const ast_matchers::MatchFinder::MatchResult &Result);
   void memberPointerDeclCheck(const ast_matchers::MatchFinder::MatchResult &Result);
   void memberNonPointerDeclCheck(const ast_matchers::MatchFinder::MatchResult &Result);
+
+  llvm::SmallVector<std::pair<std::string, std::string>, 0> getPointerTypes();
 };
 
 } // namespace clang::tidy::readability
