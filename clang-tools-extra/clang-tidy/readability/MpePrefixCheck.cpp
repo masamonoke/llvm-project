@@ -84,15 +84,33 @@ static bool isFieldPrefixCorrect(StringRef Name) {
 }
 
 static std::string varFix(StringRef Name) {
-  return std::isupper(*(Name.begin()))
-             ? "p"
-             : std::string("p") + static_cast<char>(std::toupper(*(Name.begin())));
+	std::string Fix = "p";
+	if (!std::isupper(Name.front())) {
+		Fix += static_cast<char>(std::toupper(Name.front()));
+		return Fix + std::string(Name.begin() + 1, Name.end());
+	}
+
+	return Fix + std::string(Name);
 }
 
 static std::string fieldFix(StringRef Name) {
-  return std::isupper(*(Name.begin() + 2))
-             ? "p"
-             : std::string("m_p") + static_cast<char>(std::toupper(*(Name.begin() + 2)));
+  std::string Fix = "m_p";
+
+  if (Name.starts_with("m_")) {
+    if (!std::isupper(*(Name.begin() + 2))) {
+      Fix.push_back(static_cast<char>(std::toupper(*(Name.begin() + 2))));
+      return Fix + std::string(Name.begin() + 3, Name.end());
+    }
+
+    return Fix + std::string(Name.begin() + 2, Name.end());
+  }
+
+  if (!std::isupper(Name.front())) {
+    Fix.push_back(static_cast<char>(std::toupper(Name.front())));
+    return Fix + std::string(Name.begin() + 1, Name.end());
+  }
+
+  return Fix + std::string(Name.begin() + 2, Name.end());
 }
 
 void MpePrefixCheck::plainPointerCheck(const MatchFinder::MatchResult &Result) {
@@ -106,7 +124,7 @@ void MpePrefixCheck::plainPointerCheck(const MatchFinder::MatchResult &Result) {
   if (not isVarPrefixCorrect(Name)) {
     const std::string Fix = varFix(Name);
     diag(Var->getLocation(), "pointer variable %0 should be prefixed with 'p'")
-        << Var << FixItHint::CreateInsertion(Var->getLocation(), Fix);
+        << Var << FixItHint::CreateReplacement(Var->getLocation(), Fix);
   }
 }
 
@@ -121,7 +139,7 @@ void MpePrefixCheck::memberPointerCheck(const MatchFinder::MatchResult &Result) 
     const std::string Fix = fieldFix(Name);
     diag(Var->getLocation(),
          "member pointer variable %0 should be prefixed with 'm_p'")
-        << Var << FixItHint::CreateInsertion(Var->getLocation(), Fix);
+        << Var << FixItHint::CreateReplacement(Var->getLocation(), Fix);
   }
 }
 
@@ -140,7 +158,7 @@ void MpePrefixCheck::stdSmartPointerCheck(const MatchFinder::MatchResult &Result
     diag(PtrVarDecl->getLocation(),
          "smart pointer type variable %0 should be prefixed with 'p'")
         << PtrVarDecl
-        << FixItHint::CreateInsertion(PtrVarDecl->getLocation(), Fix);
+        << FixItHint::CreateReplacement(PtrVarDecl->getLocation(), Fix);
   }
 }
 

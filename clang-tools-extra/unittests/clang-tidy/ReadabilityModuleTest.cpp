@@ -1,8 +1,8 @@
 #include "ClangTidyTest.h"
 #include "readability/BracesAroundStatementsCheck.h"
+#include "readability/MpePrefixCheck.h"
 #include "readability/NamespaceCommentCheck.h"
 #include "readability/SimplifyBooleanExprCheck.h"
-#include "readability/MpePrefixCheck.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -514,9 +514,73 @@ TEST(SimplifyBooleanExprCheckTest, CodeWithError) {
                 nullptr, "input.cc", {"-Wno-error=return-type"}));
 }
 
-// TODO: not tested yet
 TEST(MpePrefixCheckTest, RawPointer) {
 	EXPECT_EQ("void* pVar;", runCheckOnCode<MpePrefixCheck>("void* Var;"));
+}
+
+TEST(MpePrefixCheckTest, CorrectRawPointer) {
+	EXPECT_EQ("void* pVar;", runCheckOnCode<MpePrefixCheck>("void* pVar;"));
+}
+
+TEST(MpePrefixCheckTest, ClassFieldDecl) {
+  const std::unordered_map<const char *, const char *> Map{
+      {"struct Foo {\n"
+       "	void* m_var;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pVar;\n"
+       "};"},
+      {"struct Foo {\n"
+       "	void* m_Var;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pVar;\n"
+       "};"},
+      {"struct Foo {\n"
+       "	void* m_ptr;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pPtr;\n"
+       "};"},
+      {"struct Foo {\n"
+       "	void* ptr;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pPtr;\n"
+       "};"},
+      {"struct Foo {\n"
+       "	void* m_pptr;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pPptr;\n"
+       "};"},
+      {"struct Foo {\n"
+       "	void* pptr;\n"
+       "};",
+       "struct Foo {\n"
+       "	void* m_pPptr;\n"
+       "};"},
+  };
+
+  for (const auto &[TestCase, Expected] : Map) {
+    EXPECT_EQ(Expected, runCheckOnCode<MpePrefixCheck>(TestCase));
+  }
+}
+
+TEST(MpePrefixCheckTest, VarDecl) {
+  const std::unordered_map<const char *, const char *> Map{
+      {"void* ptr;", "void* pPtr;"},
+      {"void* pptr;", "void* pPptr;"},
+      {"void* Ptr;", "void* pPtr;"},
+      {"void* pppptr;", "void* pPppptr;"},
+      {"void* p;", "void* pP;"},
+      {"void* P;", "void* pP;"},
+	  {"void* m_ptr;", "void* pM_ptr;"},
+  };
+
+  for (const auto &[TestCase, Expected] : Map) {
+    EXPECT_EQ(Expected, runCheckOnCode<MpePrefixCheck>(TestCase));
+  }
 }
 
 } // namespace test

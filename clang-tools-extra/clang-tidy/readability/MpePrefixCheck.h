@@ -27,6 +27,7 @@ public:
   }
 
 private:
+  // TODO: what a type to consider as pointer should be in options passed through config
   llvm::SmallVector<std::pair<std::string, std::string>, 6> SmartPointerNames;
 
   void plainPointerCheck(const ast_matchers::MatchFinder::MatchResult &Result);
