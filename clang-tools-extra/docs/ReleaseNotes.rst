@@ -178,6 +178,11 @@ New checks
 
   Finds ternary operator usage
 
+- New :doc:`readability-mpe-prefix
+  <clang-tidy/checks/readability/mpe-prefix>` check.
+
+  Finds non-prefixed pointer variables and member fields
+
 New check aliases
 ^^^^^^^^^^^^^^^^^
 

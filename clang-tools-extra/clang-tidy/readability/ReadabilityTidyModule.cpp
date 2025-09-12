@@ -37,6 +37,7 @@
 #include "MisleadingIndentationCheck.h"
 #include "MisplacedArrayIndexCheck.h"
 #include "MpeTernaryOperatorCheckCheck.h"
+#include "MpePrefixCheck.h"
 #include "NamedParameterCheck.h"
 #include "NonConstParameterCheck.h"
 #include "OperatorsRepresentationCheck.h"
@@ -115,6 +116,8 @@ public:
         "readability-math-missing-parentheses");
     CheckFactories.registerCheck<MpeTernaryOperatorCheckCheck>(
         "readability-mpe-ternary-operator-check");
+    CheckFactories.registerCheck<MpePrefixCheck>(
+        "readability-mpe-prefix");
     CheckFactories.registerCheck<RedundantInlineSpecifierCheck>(
         "readability-redundant-inline-specifier");
     CheckFactories.registerCheck<InconsistentDeclarationParameterNameCheck>(
