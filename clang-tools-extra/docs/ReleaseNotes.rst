@@ -173,6 +173,11 @@ New checks
   Finds virtual function overrides with different visibility than the function
   in the base class.
 
+- New :doc:`readability-mpe-prefix
+  <clang-tidy/checks/readability/mpe-prefix>` check.
+
+  Finds non-prefixed pointer variables and member fields
+
 New check aliases
 ^^^^^^^^^^^^^^^^^
 
