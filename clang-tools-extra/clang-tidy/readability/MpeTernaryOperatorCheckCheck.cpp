@@ -27,8 +27,7 @@ void MpeTernaryOperatorCheckCheck::check(const MatchFinder::MatchResult &Result)
     return;
   }
 
-  diag(MatchedTernaryOp->getBeginLoc(), "ternary operator used")
-      << FixItHint::CreateRemoval(MatchedTernaryOp->getSourceRange());
+  diag(MatchedTernaryOp->getBeginLoc(), "ternary operator used");
 }
 
 } // namespace clang::tidy::readability

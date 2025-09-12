@@ -14,10 +14,7 @@
 
 namespace clang::tidy::readability {
 
-/// FIXME: Write a short description.
-///
-/// For the user-facing documentation see:
-/// http://clang.llvm.org/extra/clang-tidy/checks/readability/mpe-ternary-operator-check.html
+/// Finds ternary operator usage
 class MpeTernaryOperatorCheckCheck : public ClangTidyCheck {
 public:
   MpeTernaryOperatorCheckCheck(StringRef Name, ClangTidyContext *Context)

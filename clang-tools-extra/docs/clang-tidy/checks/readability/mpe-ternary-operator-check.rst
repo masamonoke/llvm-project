@@ -3,4 +3,4 @@
 readability-mpe-ternary-operator-check
 ======================================
 
-FIXME: Describe what patterns does the check detect and why. Give examples.
+Finds ternary operator usage. This operator leads to errors and hard to read at times
