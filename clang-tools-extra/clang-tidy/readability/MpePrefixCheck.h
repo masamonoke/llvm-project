@@ -41,6 +41,7 @@ private:
 
   void pointerVarCheck(const ast_matchers::MatchFinder::MatchResult &Result);
   void memberPointerDeclCheck(const ast_matchers::MatchFinder::MatchResult &Result);
+  void memberNonPointerDeclCheck(const ast_matchers::MatchFinder::MatchResult &Result);
 };
 
 } // namespace clang::tidy::readability

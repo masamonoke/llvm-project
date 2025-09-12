@@ -583,6 +583,23 @@ TEST(MpePrefixCheckTest, VarDecl) {
   }
 }
 
+TEST(MpePrefixCheckTest, MemberNonPtr) {
+  const std::unordered_map<const char *, const char *> Map{
+	  {
+		"struct Foo {\n"
+		"	int var;\n"
+		"};",
+		"struct Foo {\n"
+		"	int m_var;\n"
+		"};"
+	  },
+  };
+
+  for (const auto &[TestCase, Expected] : Map) {
+    EXPECT_EQ(Expected, runCheckOnCode<MpePrefixCheck>(TestCase));
+  }
+}
+
 } // namespace test
 } // namespace tidy
 } // namespace clang

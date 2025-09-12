@@ -76,6 +76,13 @@ static void warn12() {
 	};
 }
 
+// CHECK-MESSAGES: :[[@LINE+1]]:81: warning: member field 'Var' should be prefixed with 'm_'
+static void warn13() {
+	class Foo {
+		int Var;
+	};
+}
+
 static void noWarn1() {
 	void* pPointer = nullptr;
 }

@@ -34,6 +34,8 @@ void MpePrefixCheck::registerMatchers(MatchFinder *Finder) {
       ).bind("fieldPointer"), this
   );
 
+  Finder->addMatcher(fieldDecl(unless(hasType(pointerType()))).bind("fieldNonPointer"),this);
+
   for (const auto& [PointerType, BindName] : SmartPointerNames) {
     matchSmartPointer(Finder, PointerType, BindName);
   }
@@ -69,6 +71,7 @@ void MpePrefixCheck::matchSmartPointer(MatchFinder *Finder,
 void MpePrefixCheck::check(const MatchFinder::MatchResult &Result) {
   pointerVarCheck(Result);
   memberPointerDeclCheck(Result);
+  memberNonPointerDeclCheck(Result);
 }
 
 static bool isVarPrefixCorrect(StringRef Name) {
@@ -93,7 +96,12 @@ static std::string varFix(StringRef Name) {
 	return Fix + std::string(Name);
 }
 
-static std::string fieldFix(StringRef Name) {
+static std::string fieldNonPtrFix(StringRef Name) {
+	std::string Fix = "m_";
+	return Fix + std::string(Name);
+}
+
+static std::string fieldPtrFix(StringRef Name) {
   std::string Fix = "m_p";
 
   if (Name.starts_with("m_")) {
@@ -120,7 +128,6 @@ void MpePrefixCheck::plainPointerCheck(const MatchFinder::MatchResult &Result) {
   }
 
   StringRef Name = Var->getName();
-  // TODO: handle cases when variable starts from p but its a word like ptr but should be pPtr
   if (not isVarPrefixCorrect(Name)) {
     const std::string Fix = varFix(Name);
     diag(Var->getLocation(), "pointer variable %0 should be prefixed with 'p'")
@@ -136,7 +143,7 @@ void MpePrefixCheck::memberPointerCheck(const MatchFinder::MatchResult &Result) 
 
   StringRef Name = Var->getName();
   if (not isFieldPrefixCorrect(Name)) {
-    const std::string Fix = fieldFix(Name);
+    const std::string Fix = fieldPtrFix(Name);
     diag(Var->getLocation(),
          "member pointer variable %0 should be prefixed with 'm_p'")
         << Var << FixItHint::CreateReplacement(Var->getLocation(), Fix);
@@ -173,10 +180,11 @@ void MpePrefixCheck::stdSmartPointerFieldCheck(const ast_matchers::MatchFinder::
 
   StringRef FieldDeclName = PtrFieldDecl->getName();
   if (not isFieldPrefixCorrect(FieldDeclName)) {
+    const std::string Fix = fieldPtrFix(FieldDeclName);
     diag(PtrFieldDecl->getLocation(),
          "member smart pointer variable %0 should be prefixed with 'm_p'")
         << PtrFieldDecl
-        << FixItHint::CreateInsertion(PtrFieldDecl->getLocation(), "m_p");
+        << FixItHint::CreateReplacement(PtrFieldDecl->getLocation(), Fix);
   }
 }
 
@@ -191,6 +199,23 @@ void MpePrefixCheck::memberPointerDeclCheck(const ast_matchers::MatchFinder::Mat
   memberPointerCheck(Result);
   for (const auto& [_, BindName] : SmartPointerNames) {
     stdSmartPointerFieldCheck(Result, BindName);
+  }
+}
+
+void MpePrefixCheck::memberNonPointerDeclCheck(const ast_matchers::MatchFinder::MatchResult &Result) {
+  const auto* MatchedFieldDecl = Result.Nodes.getNodeAs<FieldDecl>("fieldNonPointer");
+
+  if (!MatchedFieldDecl) {
+    return;
+  }
+
+  StringRef DeclName = MatchedFieldDecl->getName();
+  if (not isFieldPrefixCorrect(DeclName)) {
+    const std::string Fix = fieldNonPtrFix(DeclName);
+    diag(MatchedFieldDecl->getLocation(),
+         "member field %0 should be prefixed with 'm_'")
+        << MatchedFieldDecl
+        << FixItHint::CreateReplacement(MatchedFieldDecl->getLocation(), Fix);
   }
 }
 
