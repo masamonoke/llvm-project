@@ -391,6 +391,7 @@ Clang-Tidy Checks
    :doc:`readability-math-missing-parentheses <readability/math-missing-parentheses>`, "Yes"
    :doc:`readability-misleading-indentation <readability/misleading-indentation>`,
    :doc:`readability-misplaced-array-index <readability/misplaced-array-index>`, "Yes"
+   :doc:`readability-mpe-ternary-operator-check <readability/mpe-ternary-operator-check>`, "Yes"
    :doc:`readability-mpe-prefix <readability/mpe-prefix>`, "Yes"
    :doc:`readability-named-parameter <readability/named-parameter>`, "Yes"
    :doc:`readability-non-const-parameter <readability/non-const-parameter>`, "Yes"
