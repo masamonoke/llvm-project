@@ -7,7 +7,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "MpeTernaryOperatorCheckCheck.h"
+#include "MpeTernaryOperatorCheck.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 
 using namespace clang::ast_matchers;
@@ -16,11 +16,11 @@ namespace clang::tidy::readability {
 
 static constexpr StringRef BindName = "ternaryOperator";
 
-void MpeTernaryOperatorCheckCheck::registerMatchers(MatchFinder *Finder) {
+void MpeTernaryOperatorCheck::registerMatchers(MatchFinder *Finder) {
   Finder->addMatcher(conditionalOperator().bind(BindName), this);
 }
 
-void MpeTernaryOperatorCheckCheck::check(const MatchFinder::MatchResult &Result) {
+void MpeTernaryOperatorCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedTernaryOp =
       Result.Nodes.getNodeAs<ConditionalOperator>(BindName);
   if (not MatchedTernaryOp) {

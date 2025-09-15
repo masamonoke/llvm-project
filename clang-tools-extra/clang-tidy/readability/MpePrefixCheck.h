@@ -27,7 +27,7 @@ public:
   }
 
 private:
-  llvm::SmallVector<std::pair<std::string, std::string>, 6> SmartPointerNames;
+  llvm::SmallVector<std::pair<std::string, std::string>, 0> SmartPointerNames;
 
   void plainPointerCheck(const ast_matchers::MatchFinder::MatchResult &Result);
   void memberPointerCheck(const ast_matchers::MatchFinder::MatchResult &Result);

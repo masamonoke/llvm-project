@@ -15,9 +15,9 @@
 namespace clang::tidy::readability {
 
 /// Finds ternary operator usage
-class MpeTernaryOperatorCheckCheck : public ClangTidyCheck {
+class MpeTernaryOperatorCheck : public ClangTidyCheck {
 public:
-  MpeTernaryOperatorCheckCheck(StringRef Name, ClangTidyContext *Context)
+  MpeTernaryOperatorCheck(StringRef Name, ClangTidyContext *Context)
       : ClangTidyCheck(Name, Context) {}
   void registerMatchers(ast_matchers::MatchFinder *Finder) override;
   void check(const ast_matchers::MatchFinder::MatchResult &Result) override;

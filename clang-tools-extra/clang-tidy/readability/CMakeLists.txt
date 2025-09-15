@@ -24,7 +24,7 @@ add_clang_library(clangTidyReadabilityModule STATIC
   IdentifierLengthCheck.cpp
   IdentifierNamingCheck.cpp
   ImplicitBoolConversionCheck.cpp
-  MpeTernaryOperatorCheckCheck.cpp
+  MpeTernaryOperatorCheck.cpp
   MpePrefixCheck.cpp
   RedundantInlineSpecifierCheck.cpp
   InconsistentDeclarationParameterNameCheck.cpp

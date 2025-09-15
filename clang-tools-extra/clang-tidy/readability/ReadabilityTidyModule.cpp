@@ -36,8 +36,8 @@
 #include "MathMissingParenthesesCheck.h"
 #include "MisleadingIndentationCheck.h"
 #include "MisplacedArrayIndexCheck.h"
-#include "MpeTernaryOperatorCheckCheck.h"
 #include "MpePrefixCheck.h"
+#include "MpeTernaryOperatorCheck.h"
 #include "NamedParameterCheck.h"
 #include "NonConstParameterCheck.h"
 #include "OperatorsRepresentationCheck.h"
@@ -114,8 +114,8 @@ public:
         "readability-implicit-bool-conversion");
     CheckFactories.registerCheck<MathMissingParenthesesCheck>(
         "readability-math-missing-parentheses");
-    CheckFactories.registerCheck<MpeTernaryOperatorCheckCheck>(
-        "readability-mpe-ternary-operator-check");
+    CheckFactories.registerCheck<MpeTernaryOperatorCheck>(
+        "readability-mpe-ternary-operator");
     CheckFactories.registerCheck<MpePrefixCheck>(
         "readability-mpe-prefix");
     CheckFactories.registerCheck<RedundantInlineSpecifierCheck>(

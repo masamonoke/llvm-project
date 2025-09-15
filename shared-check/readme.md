@@ -1,0 +1,3 @@
+- Собрать MpeCheckPlugin.so
+- При запуске clang-tidy можно прилинковать эту библиотеку, чтобы получить новые проверки, не устанавливая clang-tidy из репозитория
+    - `clang-tidy --load=/home/mrudakov/Work/llvm-project/standalone/MpeCheckPlugin.so <source0,...>`
